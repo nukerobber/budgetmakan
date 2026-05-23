@@ -8,6 +8,7 @@ const LOCATION_LABELS = {
   fastfood: "🍔 Fast Food",
   grocery: "🛒 Grocery",
   delivery: "📦 Delivery",
+  other: "✏️ Other",
 };
 
 // Colour for each location type (used in the bar chart)

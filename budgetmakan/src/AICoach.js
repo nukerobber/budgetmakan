@@ -205,7 +205,71 @@ export default function AICoach() {
           Log at least 3 meals first to unlock AI advice! 🍜
         </div>
       )}
+      
+      {/* Display sort by type */}
+      {meals.length > 0 && (
+        <div className="bg-white rounded-2xl shadow p-5">
+            <h2 className="text-sm font-bold text-gray-600 mb-4">Spending by Type</h2>
+            <div className="space-y-3">
+            {Object.entries(
+                meals.reduce((acc, meal) => {
+                acc[meal.location] = (acc[meal.location] || 0) + meal.price;
+                return acc;
+                }, {})
+            )
+                .sort((a, b) => b[1] - a[1]) // sort highest to lowest
+                .map(([type, amount]) => {
+                const total = meals.reduce((sum, m) => sum + m.price, 0);
+                const pct = Math.round((amount / total) * 100);
 
+                const LABELS = {
+                    mamak: "🍽️ Mamak",
+                    canteen: "🏫 Canteen",
+                    cafe: "🧋 Café",
+                    fastfood: "🍔 Fast Food",
+                    grocery: "🛒 Grocery",
+                    delivery: "📦 Delivery",
+                    other: "✏️ Other",
+                };
+
+                const COLORS = {
+                    mamak: "bg-yellow-400",
+                    canteen: "bg-blue-400",
+                    cafe: "bg-purple-400",
+                    fastfood: "bg-red-400",
+                    grocery: "bg-green-400",
+                    delivery: "bg-orange-400",
+                    other: "bg-gray-400",
+                };
+
+                return (
+                    <div key={type}>
+                    {/* Type label + amount */}
+                    <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm text-gray-600">
+                        {LABELS[type] || type}
+                        </span>
+                        <span className="text-sm font-bold text-gray-700">
+                        RM{amount.toFixed(2)}
+                        </span>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                        <div
+                        className={`${COLORS[type] || "bg-gray-400"} h-3 rounded-full transition-all duration-500`}
+                        style={{ width: `${pct}%` }}
+                        />
+                    </div>
+
+                    {/* Percentage label */}
+                    <p className="text-xs text-gray-400 mt-0.5">{pct}% of total</p>
+                    </div>
+                );
+          })}
+    </div>
+  </div>
+)}
     </div>
   );
 }

@@ -47,14 +47,14 @@ export default function LocationPicker({ onLocationReady }) {
     });
 
     // Green marker for user position
-    new google.maps.Marker({
-      position: { lat, lng },
-      map,
-      title: "You are here",
-      icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-    });
+    let marker = new google.maps.Marker({
+        position: { lat, lng },
+        map,
+        title: "You are here",
+        icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+      });
 
-    // Reverse geocode coordinates → readable address
+      // Reverse geocode coordinates → readable address
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ location: { lat, lng } }, (results, status) => {
       if (status === "OK" && results[0]) {
@@ -64,23 +64,41 @@ export default function LocationPicker({ onLocationReady }) {
       }
     });
 
-    // Find nearby restaurants and drop red markers
-    const service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(
-      { location: { lat, lng }, radius: 500, type: "restaurant" },
-      (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          results.slice(0, 5).forEach((place) => {
-            new google.maps.Marker({
-              position: place.geometry.location,
-              map,
-              title: place.name,
-              icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-            });
-          });
-        }
-      }
-    );
+    map.addListener("click", (e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+      
+        marker.setPosition({ lat, lng });
+        marker.setTitle("Selected location");
+        
+        // Search for location address
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            const addr = results[0].formatted_address;
+            setAddress(addr);
+            onLocationReady({ lat, lng, address: addr });
+          }
+        });
+        
+        // Place Marker on nearby places
+        const service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(
+          { location: { lat, lng }, radius: 500, type: "restaurant" },
+          (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              results.slice(0, 5).forEach((place) => {
+                new google.maps.Marker({
+                  position: place.geometry.location,
+                  map,
+                  title: place.name,
+                  icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                });
+              });
+            }
+          }
+        );
+      });
+
   };
 
   const getLocation = () => {

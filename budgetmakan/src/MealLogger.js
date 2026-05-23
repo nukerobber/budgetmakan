@@ -138,7 +138,7 @@ export default function MealLogger() {
         {location === "other" && (
             <input
               type="text"
-              placeholder="Enter your location..."
+              placeholder="Enter your custom location..."
               value={customLocation}
               onChange={(e) => setCustomLocation(e.target.value)}
               className="mt-2 w-full border border-gray-200 rounded-xl px-4 py-2 text-sm
@@ -149,7 +149,7 @@ export default function MealLogger() {
         {/* Live Location */}
         <div>
             <label className="text-sm font-medium text-gray-600">
-                Your current location (optional)
+                 Choose the location (optional)
             </label>
             <div className="mt-1">
                 <LocationPicker onLocationReady={(loc) => setUserLocation(loc)} />

@@ -104,7 +104,8 @@ src/
 ├── MealLogger.js     # Screen 1 — log meals + location
 ├── Dashboard.js      # Screen 2 — spending breakdown + budget ring
 ├── AICoach.js        # Screen 3 — AI-powered spending advice
-└── LocationPicker.js # Component — live GPS map + nearby restaurants
+├── LocationPicker.js # Component — live GPS map + nearby restaurants
+└── Onboarding.js     # First-time welcome flow — name, budget setup, app intro slides
 ```
 
 ---

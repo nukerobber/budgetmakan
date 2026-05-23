@@ -2,10 +2,22 @@ import { useState } from "react";
 import MealLogger from "./MealLogger";
 import Dashboard from "./Dashboard";
 import AICoach from "./AICoach";
+import Onboarding from "./Onboarding";
 
 export default function App() {
+  // Check if user has already onboarded
+  const [onboarded, setOnboarded] = useState(
+    () => localStorage.getItem("budgetmakan_onboarded") === "true"
+  );
   const [screen, setScreen] = useState("logger");
 
+  // Show onboarding if user login first time
+  if (!onboarded) {
+    return <Onboarding onDone={() => setOnboarded(true)} />;
+  };
+
+  // Get saved name to personalise the greeting
+  const name = localStorage.getItem("budgetmakan_name") || "there";
   return (
     <div className="min-h-screen bg-green-50">
       
