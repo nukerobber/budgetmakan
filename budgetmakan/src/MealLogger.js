@@ -1,4 +1,5 @@
 import { useState } from "react";
+import LocationPicker from "./LocationPicker";
 
 // Location options relevant to Malaysian uni students
 const LOCATIONS = [
@@ -20,6 +21,7 @@ export default function MealLogger() {
   const [customLocation, setCustomLocation] = useState("");
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
 
   // Load existing meals from localStorage
   const getMeals = () => {
@@ -46,6 +48,7 @@ export default function MealLogger() {
       mealTime,
       date: new Date().toLocaleDateString("en-MY"), // e.g. "22/5/2026"
       timestamp: new Date().toISOString(),
+      userLocation: userLocation || null,
     };
 
     // Save to localStorage
@@ -54,6 +57,9 @@ export default function MealLogger() {
       "budgetmakan_meals",
       JSON.stringify([...existing, newMeal])
     );
+    if (userLocation) {
+        localStorage.setItem("budgetmakan_last_location", JSON.stringify(userLocation));
+    }
 
     // Reset form
     setFoodName("");
@@ -61,6 +67,7 @@ export default function MealLogger() {
     setCustomLocation("");
     setPrice("");
     setMealTime("lunch");
+    setUserLocation(null);
     setError("");
     setSaved(true);
     setTimeout(() => setSaved(false), 2500); // hide success message after 2.5s
@@ -139,6 +146,15 @@ export default function MealLogger() {
             />
           )}
         
+        {/* Live Location */}
+        <div>
+            <label className="text-sm font-medium text-gray-600">
+                Your current location (optional)
+            </label>
+            <div className="mt-1">
+                <LocationPicker onLocationReady={(loc) => setUserLocation(loc)} />
+            </div>
+        </div>
 
         {/* Price Input */}
         <div>
