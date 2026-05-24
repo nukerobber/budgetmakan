@@ -70,7 +70,7 @@ Malaysian university students eat out constantly but have no idea how much they'
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/budgetmakan.git
+git clone https://github.com/nukerobber/budgetmakan.git
 cd budgetmakan
 npm install
 ```
